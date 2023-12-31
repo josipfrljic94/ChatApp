@@ -8,6 +8,8 @@ import com.example.fragment.R
 import com.example.fragment.databinding.ActivityMainBinding
 import com.example.fragment.fragments.HomeFragment
 import com.example.fragment.fragments.ListOnlineFragment
+import com.example.fragment.service.MealService
+import com.example.fragment.service.NetworkSource
 import com.google.android.material.navigation.NavigationView
 
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,6 +39,8 @@ class MainActivity : AppCompatActivity() {
         loF= ListOnlineFragment()
         fragmentSupplayer(hf)
         setupDrawerContent(binding.navView)
+
+//        NetworkSource().getMealsData(mapOf("keyOf" to "dc953b44c20c4685b0f7d980b7e90d8b"))
     }
 
     private fun setupDrawerContent(navigationView: NavigationView){
