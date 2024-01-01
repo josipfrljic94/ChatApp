@@ -8,7 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.fragment.R
+import com.example.fragment.adapters.MealsAdapter
 import com.example.fragment.util.NetworkResponse
 import com.example.fragment.viewmodel.MainViewModel
 import com.example.fragment.viewmodel.SearchMealViewModel
@@ -19,12 +25,15 @@ class HomeFragment : Fragment() {
 
     private lateinit var mainViewModel: MainViewModel
     private lateinit var searchMealViewModel: SearchMealViewModel
+    private lateinit var mealsAdapter: MealsAdapter
+    private lateinit var mealRecyclerView:RecyclerView
     private lateinit var  mView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainViewModel= ViewModelProvider(requireActivity())[MainViewModel::class.java]
         searchMealViewModel= ViewModelProvider(requireActivity())[SearchMealViewModel::class.java]
+        mealsAdapter= MealsAdapter(context)
     }
 
     override fun onCreateView(
@@ -32,37 +41,40 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         mView=inflater.inflate(R.layout.fragment_home, container, false)
+        mealRecyclerView=mView.findViewById(R.id.recyclerView)
+        setupRecyclerView()
         requestApiData()
         return mView
     }
 
     private fun requestApiData() {
         mainViewModel.getRecipes(searchMealViewModel.applyQueries())
-        mainViewModel.mealResponse.observe(viewLifecycleOwner) { response ->
-            when (response) {
-                is NetworkResponse.Success -> {
-//                    hideShimmerEffect()
-//                    response.data?.let { mAdapter.setData(it) }
-                    Log.d("HOME FRAGMENT",response.data.toString())
+        lifecycleScope.launchWhenStarted {
+            mainViewModel._dataState.collect { state ->
+                when (state) {
+                    is NetworkResponse.Loading -> Toast.makeText(context,"Loading",Toast.LENGTH_LONG).show()
+                    is NetworkResponse.Success -> {
+                        Toast.makeText(context,"Success",Toast.LENGTH_LONG).show()
+                        Log.d("HFSUCCESS",state.data.toString())
+                        mealsAdapter.setMeals(ArrayList(state.data?.results))
+
+
+                    }
+                    is NetworkResponse.Error -> Toast.makeText(context,"Error",Toast.LENGTH_LONG).show()
+
                 }
-
-                is NetworkResponse.Error -> {
-//                    hideShimmerEffect()
-                    Toast.makeText(
-                        requireContext(),
-                        response.message.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-                is NetworkResponse.Loading -> {
-//                    showShimmerEffect()
-                }
-
-
             }
         }
+
     }
+
+    private fun setupRecyclerView() {
+        mealRecyclerView.apply {
+            layoutManager=LinearLayoutManager(activity)
+            adapter=mealsAdapter
+        }
+    }
+
 
 
 }

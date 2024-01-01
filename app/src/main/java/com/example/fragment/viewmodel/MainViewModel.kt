@@ -8,7 +8,7 @@ import com.example.fragment.dao.FoodRecipe
 import com.example.fragment.repository.Repository
 import com.example.fragment.util.NetworkResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ViewModelScoped
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.lang.Exception
@@ -17,23 +17,25 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(private val repository: Repository):ViewModel(),
     LifecycleObserver {
-    var mealResponse:MutableLiveData<NetworkResponse<FoodRecipe>> = MutableLiveData()
+//    val _dataState:Flowable<NetworkResponse<FoodRecipe>> = (NetworkResponse.Loading())
+    val _dataState: MutableStateFlow<NetworkResponse<FoodRecipe>> = MutableStateFlow(NetworkResponse.Loading())
+
 
     fun getRecipes(queries:Map<String,String>)=viewModelScope.launch {
         getRecipesResponse(queries)
     }
 
     private suspend fun getRecipesResponse(queries: Map<String, String>) {
-        mealResponse.value=NetworkResponse.Loading()
+        _dataState.value=NetworkResponse.Loading()
         try {
             val response=repository.remote.getMeals(queries)
-            mealResponse.value=handleFoodRecipesResponse(response)
+            _dataState.value=handleFoodRecipesResponse(response)
         }catch (e:Exception){
-            mealResponse.value=NetworkResponse.Error("Recepies not found")
+            _dataState.value=NetworkResponse.Error("Recepies not found")
         }
     }
 
-    private fun handleFoodRecipesResponse(response: Response<FoodRecipe>): NetworkResponse<FoodRecipe>? {
+    private fun handleFoodRecipesResponse(response: Response<FoodRecipe>): NetworkResponse<FoodRecipe> {
         when {
             response.message().toString().contains("timeout") -> {
                 return NetworkResponse.Error("Timeout")

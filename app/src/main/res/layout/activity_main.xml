@@ -5,10 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
-    <FrameLayout
-        android:id="@+id/flContent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
@@ -16,6 +12,13 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         tools:openDrawer="start">
+
+        <FrameLayout
+            android:id="@+id/flContent"
+            android:paddingTop="?attr/actionBarSize"
+            android:nestedScrollingEnabled="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <include
             android:id="@+id/include"
@@ -31,6 +34,7 @@
             android:fitsSystemWindows="true"
             app:headerLayout="@layout/header_navigation_drawer"
             app:menu="@menu/top_app_bar" />
+
 
     </androidx.drawerlayout.widget.DrawerLayout>
 
