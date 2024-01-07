@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.fragment.R
 import com.example.fragment.dao.Result
+import com.example.fragment.databinding.MealAdapterBinding
 
 
 class MealsAdapter(val context: Context?):RecyclerView.Adapter<MealsAdapter.MealViewHolder>() {
@@ -24,29 +26,44 @@ class MealsAdapter(val context: Context?):RecyclerView.Adapter<MealsAdapter.Meal
     }
 
 
-    class MealViewHolder(itemView:View):RecyclerView.ViewHolder(itemView){
-        val mealNameTextView: TextView = itemView.findViewById(R.id.mealName)
-        val mealImageView: ImageView = itemView.findViewById(R.id.mealImg)
+    class MealViewHolder(private val binding:MealAdapterBinding):RecyclerView.ViewHolder(binding.root){
+
+        fun bindMeal(meal:Result){
+                binding.meal=meal
+                binding.executePendingBindings()
+            }
+
+        companion object {
+            fun from(parent: ViewGroup): MealViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = MealAdapterBinding.inflate(layoutInflater, parent, false)
+                return MealViewHolder(binding)
+            }
+        }
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MealViewHolder {
-        val view= LayoutInflater.from(context).inflate(R.layout.meal_adapter, parent, false)
-        return MealViewHolder(view)
+    companion object {
+        private val diffUtil = object : DiffUtil.ItemCallback<Result>() {
+
+            override fun areItemsTheSame(oldItem: Result, newItem: Result): Boolean =
+                oldItem.title == newItem.title
+
+            override fun areContentsTheSame(oldItem: Result, newItem: Result): Boolean =
+                oldItem == newItem
+        }
     }
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MealViewHolder=MealViewHolder(MealAdapterBinding.inflate(
+        LayoutInflater.from(parent.context),parent,false))
+
 
     override fun getItemCount(): Int {
         return mealList.size
     }
 
-    override fun onBindViewHolder(holder: MealViewHolder, position: Int) {
-        val item=mealList[position]
+    override fun onBindViewHolder(holder: MealViewHolder, position: Int) =
+        holder.bindMeal(mealList[position])
 
-
-        Glide.with(holder.itemView)
-            .load(item.image)
-            .into(holder.mealImageView)
-
-        holder.mealNameTextView.text=item.title
-    }
 }

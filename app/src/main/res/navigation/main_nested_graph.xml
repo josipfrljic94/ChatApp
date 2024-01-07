@@ -1,0 +1,21 @@
+<!-- nested_nav_graph.xml -->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nested_nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.fragment.fragments.HomeFragment"
+        android:label="Home Meals">
+        <!-- Define actions and other configurations -->
+    </fragment>
+    <fragment
+        android:id="@+id/mealDetailFragment"
+        android:name="com.example.fragment.fragments.MealDetailFragment"
+        android:label="Meal Detail">
+        <!-- Define actions and other configurations -->
+    </fragment>
+
+
+</navigation>

@@ -37,7 +37,8 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
-        viewBinding = true
+        dataBinding = true
+        viewBinding=true
     }
 }
 
@@ -45,6 +46,7 @@ dependencies {
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation("androidx.navigation:navigation-fragment:2.7.6")
     //versions
     val fragment_version = "1.6.2"
 
@@ -68,6 +70,18 @@ dependencies {
     //Glide
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+
+    // coil
+    implementation("io.coil-kt:coil:0.13.0")
+
+    val navVersion =  "2.2.1"
+
+    // Kotlin
+    implementation ("androidx.navigation:navigation-fragment-ktx:$navVersion")
+    implementation ("androidx.navigation:navigation-ui-ktx:$navVersion")
+
+    // Feature module Support
+    implementation ("androidx.navigation:navigation-dynamic-features-fragment:$navVersion")
 }
 
 // Allow references to generated code

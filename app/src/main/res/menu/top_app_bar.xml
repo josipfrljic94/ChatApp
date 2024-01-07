@@ -3,14 +3,15 @@
 
     <item
         android:id="@+id/homeFragment"
-
         android:title="Favorite"
+        android:icon="@drawable/ic_home"
         android:contentDescription="Fav description"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/listOnlineFragment"
-        android:title="Search"
+        android:title="listOnline"
+        android:icon="@drawable/ic_people"
         android:contentDescription="Search description"
         app:showAsAction="ifRoom" />
 

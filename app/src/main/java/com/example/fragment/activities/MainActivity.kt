@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         binding=ActivityMainBinding.inflate(layoutInflater)
         val view= binding.root
         setContentView(view)
-        binding.include.topAppBar.setNavigationOnClickListener(){
+        binding.topAppBar.setNavigationOnClickListener(){
             binding.drawerLayout.open()
         }
 

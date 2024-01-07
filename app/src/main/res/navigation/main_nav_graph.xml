@@ -1,0 +1,20 @@
+<!-- main_nav_graph.xml -->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.fragment.fragments.HomeFragment"
+        android:label="List Online">
+
+    </fragment>
+    <fragment
+        android:id="@+id/listOnlineFragment"
+        android:name="com.example.fragment.fragments.ListOnlineFragment"
+        android:label="List Online">
+    </fragment>
+
+
+</navigation>
