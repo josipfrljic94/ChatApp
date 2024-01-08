@@ -4,12 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.view.GravityCompat
 import androidx.navigation.Navigation
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.fragment.R
 import com.example.fragment.databinding.ActivityMainBinding
-import com.example.fragment.fragments.HomeFragment
-import com.example.fragment.fragments.ListOnlineFragment
 import com.google.android.material.navigation.NavigationView
 
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,8 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var hf:HomeFragment
-    private lateinit var loF:ListOnlineFragment
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     private val navController by lazy {
         Navigation.findNavController(this, R.id.nav_host_fragment)
@@ -30,13 +29,20 @@ class MainActivity : AppCompatActivity() {
         val view= binding.root
         setContentView(view)
 
-        setSupportActionBar(binding.topAppBar)
-        setupDrawerContent(binding.navView)
+        setSupportActionBar(binding.toolbarInclude.topAppBar)
+        appBarConfiguration = AppBarConfiguration(setOf(
+            R.id.homeFragment, R.id.listOnlineFragment), binding.drawerLayout)
+        setupDrawerContent(binding.navView,appBarConfiguration)
 
     }
 
-    private fun setupDrawerContent(navigationView: NavigationView){
+    private fun setupDrawerContent(navigationView: NavigationView,appBarConfiguration: AppBarConfiguration){
         navigationView.setupWithNavController(navController)
+        //if you dont want toolbar is connected
+        // setupActionBarWithNavController(navController, appBarConfiguration)
+
+
+        //if you want back setup  this bind toolbar state with current state
         NavigationUI.setupActionBarWithNavController(this, navController,binding.drawerLayout)
     }
 

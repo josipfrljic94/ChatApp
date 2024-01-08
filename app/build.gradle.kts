@@ -3,6 +3,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
+    id("androidx.navigation.safeargs.kotlin") version "2.7.1"
 }
 
 
@@ -82,6 +83,9 @@ dependencies {
 
     // Feature module Support
     implementation ("androidx.navigation:navigation-dynamic-features-fragment:$navVersion")
+
+//    implementation("androidx.navigation.safeargs.kotlin:androidx.navigation.safeargs.kotlin.gradle.plugin:2.7.1")
+
 }
 
 // Allow references to generated code

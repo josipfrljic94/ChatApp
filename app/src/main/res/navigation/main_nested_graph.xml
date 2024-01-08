@@ -9,12 +9,19 @@
         android:name="com.example.fragment.fragments.HomeFragment"
         android:label="Home Meals">
         <!-- Define actions and other configurations -->
+        <action
+            android:id="@+id/action_homeFragment_to_mealDetailFragment"
+            app:destination="@id/mealDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/mealDetailFragment"
         android:name="com.example.fragment.fragments.MealDetailFragment"
         android:label="Meal Detail">
-        <!-- Define actions and other configurations -->
+        <argument
+            android:name="title"
+            android:defaultValue=""
+            app:argType="string"
+            />
     </fragment>
 
 

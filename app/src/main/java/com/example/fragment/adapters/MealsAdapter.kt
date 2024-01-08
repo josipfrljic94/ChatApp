@@ -1,23 +1,25 @@
 package com.example.fragment.adapters
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.NavDirections
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.fragment.R
 import com.example.fragment.dao.Result
 import com.example.fragment.databinding.MealAdapterBinding
+import com.example.fragment.fragments.HomeFragmentDirections
 
 
 class MealsAdapter(val context: Context?):RecyclerView.Adapter<MealsAdapter.MealViewHolder>() {
     private var mealList= ArrayList<Result>()
-    lateinit var onItemClick:((Result)->Unit)
-
 
     fun setMeals(mealsList: ArrayList<Result>){
         mealList=mealsList
@@ -63,7 +65,17 @@ class MealsAdapter(val context: Context?):RecyclerView.Adapter<MealsAdapter.Meal
         return mealList.size
     }
 
-    override fun onBindViewHolder(holder: MealViewHolder, position: Int) =
-        holder.bindMeal(mealList[position])
 
+    override fun onBindViewHolder(holder: MealViewHolder, position: Int){
+        holder.bindMeal(mealList[position])
+        val bundle=Bundle()
+        bundle.putString("title",mealList[position].title)
+
+        holder.itemView.setOnClickListener{
+            //option 1
+            //findNavController(holder.itemView).navigate(R.id.action_homeFragment_to_mealDetailFragment,bundle)
+            val action=HomeFragmentDirections.actionHomeFragmentToMealDetailFragment(mealList[position].title)
+            findNavController(holder.itemView).navigate(action)
+        }
+    }
 }
