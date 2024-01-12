@@ -84,7 +84,9 @@ dependencies {
     // Feature module Support
     implementation ("androidx.navigation:navigation-dynamic-features-fragment:$navVersion")
 
-//    implementation("androidx.navigation.safeargs.kotlin:androidx.navigation.safeargs.kotlin.gradle.plugin:2.7.1")
+    implementation("com.intuit.sdp:sdp-android:1.0.6")
+// For SSP, use this:
+    implementation("com.intuit.ssp:ssp-android:1.0.6")
 
 }
 

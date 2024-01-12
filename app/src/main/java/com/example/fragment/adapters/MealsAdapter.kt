@@ -68,13 +68,14 @@ class MealsAdapter(val context: Context?):RecyclerView.Adapter<MealsAdapter.Meal
 
     override fun onBindViewHolder(holder: MealViewHolder, position: Int){
         holder.bindMeal(mealList[position])
-        val bundle=Bundle()
-        bundle.putString("title",mealList[position].title)
+//        val bundle=Bundle()
+//        bundle.putString("title",mealList[position].title)
+//        bundle.putString("imgUrl",mealList[position].image)
 
         holder.itemView.setOnClickListener{
             //option 1
             //findNavController(holder.itemView).navigate(R.id.action_homeFragment_to_mealDetailFragment,bundle)
-            val action=HomeFragmentDirections.actionHomeFragmentToMealDetailFragment(mealList[position].title)
+            val action=HomeFragmentDirections.actionHomeFragmentToMealDetailFragment(mealList[position].title,mealList[position].image)
             findNavController(holder.itemView).navigate(action)
         }
     }

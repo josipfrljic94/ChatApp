@@ -22,6 +22,11 @@
             android:defaultValue=""
             app:argType="string"
             />
+        <argument
+            android:name="imgUrl"
+            android:defaultValue=""
+            app:argType="string"
+            />
     </fragment>
 
 
