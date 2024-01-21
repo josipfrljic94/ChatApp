@@ -4,6 +4,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
     id("androidx.navigation.safeargs.kotlin") version "2.7.1"
+    id("com.google.devtools.ksp")
 }
 
 
@@ -77,7 +78,7 @@ dependencies {
 
     val navVersion =  "2.2.1"
 
-    // Kotlin
+    // Navigatiom
     implementation ("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation ("androidx.navigation:navigation-ui-ktx:$navVersion")
 
@@ -87,6 +88,17 @@ dependencies {
     implementation("com.intuit.sdp:sdp-android:1.0.6")
 // For SSP, use this:
     implementation("com.intuit.ssp:ssp-android:1.0.6")
+
+
+    //Room
+    val room_version = "2.6.1"
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:${room_version}")
+
+
+    implementation("com.squareup.retrofit2:converter-gson:2.8.1")
 
 }
 

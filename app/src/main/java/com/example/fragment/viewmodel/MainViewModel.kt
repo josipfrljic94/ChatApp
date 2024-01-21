@@ -1,14 +1,19 @@
 package com.example.fragment.viewmodel
 
 import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.fragment.dao.FoodRecipe
+import com.example.fragment.database.MealEntity
 import com.example.fragment.repository.Repository
 import com.example.fragment.util.NetworkResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.lang.Exception
@@ -21,18 +26,45 @@ class MainViewModel @Inject constructor(private val repository: Repository):View
     val _dataState: MutableStateFlow<NetworkResponse<FoodRecipe>> = MutableStateFlow(NetworkResponse.Loading())
 
 
-    fun getRecipes(queries:Map<String,String>)=viewModelScope.launch {
-        getRecipesResponse(queries)
+    /** ROOM DATABASE */
+
+    val readRecipes: LiveData<List<MealEntity>> = repository.local.readDatabase().asLiveData()
+
+    private fun insertRecipes(mealEntity: MealEntity) =
+        viewModelScope.launch(Dispatchers.IO){
+            repository.local.insertRecipes(mealEntity = mealEntity)
+        }
+
+    private fun offlineCacheRecipes(foodRecipe: FoodRecipe) {
+        val recipesEntity = MealEntity(foodRecipe)
+        insertRecipes(recipesEntity)
     }
 
-    private suspend fun getRecipesResponse(queries: Map<String, String>) {
+
+
+
+
+//    fun getRecipes(queries:Map<String,String>)=viewModelScope.launch {
+//        getRecipesResponse(queries)
+//    }
+
+     suspend fun getRecipesResponse(queries: Map<String, String>)=flow<FoodRecipe> {
         _dataState.value=NetworkResponse.Loading()
         try {
             val response=repository.remote.getMeals(queries)
-            _dataState.value=handleFoodRecipesResponse(response)
+            emit(response.body()!!)
+            val foodRecipe = response.body()
+            if(foodRecipe != null) {
+                offlineCacheRecipes(foodRecipe)
+            }
+//            _dataState.value=handleFoodRecipesResponse(response)
         }catch (e:Exception){
-            _dataState.value=NetworkResponse.Error("Recepies not found")
+//                emit(e)
+//            _dataState.value=NetworkResponse.Error("Recepies not found")
         }
+         viewModelScope.launch(Dispatchers.IO){
+
+         }
     }
 
     private fun handleFoodRecipesResponse(response: Response<FoodRecipe>): NetworkResponse<FoodRecipe> {
