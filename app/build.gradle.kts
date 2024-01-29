@@ -8,6 +8,8 @@ plugins {
 }
 
 
+
+
 android {
     namespace = "com.example.fragment"
     compileSdk = 34
@@ -98,7 +100,20 @@ dependencies {
     implementation("androidx.room:room-ktx:${room_version}")
 
 
+    val epoxyVersion="4.6.4"
+
+    implementation("com.airbnb.android:epoxy:$epoxyVersion")
+    // Add the annotation processor if you are using Epoxy's annotations (recommended)
+//    annotationProcessor("com.airbnb.android:epoxy-processor:$epoxyVersion")
+    kapt("com.airbnb.android:epoxy-processor:$epoxyVersion")
+
+//    kapt("groupId:artifactId:version")
+
+
+
     implementation("com.squareup.retrofit2:converter-gson:2.8.1")
+
+
 
 }
 

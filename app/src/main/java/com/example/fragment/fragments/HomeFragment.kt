@@ -12,10 +12,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.epoxy.EpoxyRecyclerView
+import com.example.fragment.ProductMapper
 import com.example.fragment.R
 import com.example.fragment.adapters.MealsAdapter
 import com.example.fragment.dao.FoodRecipe
+import com.example.fragment.dao.ResponseProduct
 import com.example.fragment.databinding.FragmentHomeBinding
+import com.example.fragment.epoxy.ProductEpoxyController
 import com.example.fragment.util.NetworkResponse
 import com.example.fragment.viewmodel.MainViewModel
 import com.example.fragment.viewmodel.SearchMealViewModel
@@ -30,11 +34,13 @@ class HomeFragment : Fragment() {
     private lateinit var searchMealViewModel: SearchMealViewModel
     private lateinit var mealsAdapter: MealsAdapter
     private lateinit var mealRecyclerView:RecyclerView
+    private lateinit var epoxyRV:EpoxyRecyclerView
     private lateinit var  mView: View
 //    private lateinit var binding: FragmentHomeBinding
 
     private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding
+    private var epoxyController:ProductEpoxyController?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,17 +56,25 @@ class HomeFragment : Fragment() {
 //        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
 
         _binding=FragmentHomeBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = this
-        binding.viewModel = mainViewModel
+        if(binding != null){
+            binding!!.lifecycleOwner = this
+            binding!!.viewModel = mainViewModel
 //        mealRecyclerView=mView.findViewById(R.id.recyclerView)
-        mealRecyclerView=binding.recyclerView
-        setupRecyclerView()
-        requestApiData()
-        return binding.root
+            mealRecyclerView=binding!!.recyclerView
+            epoxyRV=binding!!.epoxyRecyclerView
+            epoxyRV.layoutManager=LinearLayoutManager(context)
+            epoxyController= ProductEpoxyController()
+            epoxyRV!!.setController(epoxyController!!)
+            setupRecyclerView()
+//            requestApiData()
+            requestProductApiData()
+
+        }
+
+        return binding!!.root
     }
 
     private fun requestApiData() {
-//        mainViewModel.getRecipes(searchMealViewModel.applyQueries())
         lifecycleScope.launch {
             mainViewModel.getRecipesResponse(searchMealViewModel.applyQueries()).collect { state ->
                 when (state) {
@@ -80,12 +94,52 @@ class HomeFragment : Fragment() {
 
     }
 
+    private fun requestProductApiData() {
+        lifecycleScope.launch {
+            mainViewModel.getProductResponse().collect { state ->
+//                when (state) {
+//                    is NetworkResponse.Loading -> Toast.makeText(context,"Loading",Toast.LENGTH_SHORT).show()
+//                    is ResponseProduct -> {
+//                        Toast.makeText(context,"Success",Toast.LENGTH_SHORT).show()
+//                        Log.d("HFSUCCESS",state.state.toString())
+//                        mealsAdapter.setMeals(ArrayList(state?.results))
+
+//                        binding.epoxyRecyclerView.setController()
+
+                        if(state.size>0){
+                            val d=state.map{
+                                    ProductMapper().buildProduct(it)
+                                }
+                            Log.d("Product_Title",d[0].title)
+                            epoxyController?.setData(d)
+                        }
+
+//                        val epoxyController:ProductEpoxyController()
+//                        epoxyController.setData(ResponseProduct!!)
+
+
+                    }
+//                    else -> Toast.makeText(context,"Error",Toast.LENGTH_SHORT).show()
+
+//                }
+//            }
+        }
+
+    }
+
     private fun setupRecyclerView() {
         mealRecyclerView.apply {
             layoutManager=LinearLayoutManager(activity)
             adapter=mealsAdapter
         }
     }
+
+//    private fun setupEpoxyRecyclerView() {
+//        epoxyRV.apply {
+//            layoutManager=LinearLayoutManager(activity)
+//            adapter=
+//        }
+//    }
 
 
 //    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

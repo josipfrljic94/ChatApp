@@ -1,12 +1,16 @@
 package com.example.fragment.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.fragment.ProductMapper
 import com.example.fragment.dao.FoodRecipe
+import com.example.fragment.dao.Product
+import com.example.fragment.dao.ResponseProduct
 import com.example.fragment.database.MealEntity
 import com.example.fragment.repository.Repository
 import com.example.fragment.util.NetworkResponse
@@ -43,11 +47,6 @@ class MainViewModel @Inject constructor(private val repository: Repository):View
 
 
 
-
-//    fun getRecipes(queries:Map<String,String>)=viewModelScope.launch {
-//        getRecipesResponse(queries)
-//    }
-
      suspend fun getRecipesResponse(queries: Map<String, String>)=flow<FoodRecipe> {
         _dataState.value=NetworkResponse.Loading()
         try {
@@ -65,6 +64,26 @@ class MainViewModel @Inject constructor(private val repository: Repository):View
          viewModelScope.launch(Dispatchers.IO){
 
          }
+    }
+
+    suspend fun getProductResponse()=flow<ResponseProduct> {
+        _dataState.value=NetworkResponse.Loading()
+        try {
+            val response=repository.remote.getProducts()
+            emit(response.body()!!)
+//            val foodRecipe = response.body()
+//            if(foodRecipe != null) {
+//                offlineCacheRecipes(foodRecipe)
+//            }
+//            _dataState.value=handleFoodRecipesResponse(response)
+        }catch (e:Exception){
+//                emit(e)
+//            _dataState.value=NetworkResponse.Error("Recepies not found")
+            Log.d("Erorror insde",e.message.toString())
+        }
+        viewModelScope.launch(Dispatchers.IO){
+
+        }
     }
 
     private fun handleFoodRecipesResponse(response: Response<FoodRecipe>): NetworkResponse<FoodRecipe> {
