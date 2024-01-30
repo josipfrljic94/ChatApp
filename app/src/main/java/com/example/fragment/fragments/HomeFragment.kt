@@ -18,6 +18,7 @@ import com.example.fragment.R
 import com.example.fragment.adapters.MealsAdapter
 import com.example.fragment.dao.FoodRecipe
 import com.example.fragment.dao.ResponseProduct
+import com.example.fragment.dao.SectionLabel
 import com.example.fragment.databinding.FragmentHomeBinding
 import com.example.fragment.epoxy.ProductEpoxyController
 import com.example.fragment.util.NetworkResponse
@@ -111,7 +112,9 @@ class HomeFragment : Fragment() {
                                     ProductMapper().buildProduct(it)
                                 }
                             Log.d("Product_Title",d[0].title)
-                            epoxyController?.setData(d)
+                            val sectionTitle=SectionLabel("Epoxy test",R.drawable.ic_people)
+
+                            epoxyController?.updateData(sectionTitle,d)
                         }
 
 //                        val epoxyController:ProductEpoxyController()
