@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbarInclude.topAppBar)
         appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.homeFragment, R.id.listOnlineFragment), binding.drawerLayout)
+            R.id.homeFragment, R.id.listOnlineFragment,R.id.sportFeedFragment), binding.drawerLayout)
         setupDrawerContent(binding.navView,appBarConfiguration)
 
     }

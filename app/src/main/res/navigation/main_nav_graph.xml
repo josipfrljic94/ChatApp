@@ -13,4 +13,13 @@
     </dialog>
 
 
+    <fragment
+        android:id="@+id/sportFeedFragment"
+        android:name="com.example.fragment.fragments.SportFeedFragment"
+        android:label="Sport Feed"
+        />
+
+
+
+
 </navigation>

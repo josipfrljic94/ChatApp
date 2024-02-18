@@ -42,7 +42,7 @@ class HomeFragment : Fragment() {
     private lateinit var mealRecyclerView:RecyclerView
     private lateinit var epoxyRV:EpoxyRecyclerView
     private lateinit var  mView: View
-//    private lateinit var binding: FragmentHomeBinding
+
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding
