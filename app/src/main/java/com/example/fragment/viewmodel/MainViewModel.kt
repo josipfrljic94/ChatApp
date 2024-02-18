@@ -80,7 +80,7 @@ var searchString=""
     }
 
 
-    suspend fun getProducts() {
+    private suspend fun getProducts() {
         _productDataState.value = NetworkResponse.Loading()
         try {
             val response = repository.remote.getProducts()

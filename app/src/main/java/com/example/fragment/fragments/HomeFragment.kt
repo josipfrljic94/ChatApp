@@ -139,14 +139,16 @@ class HomeFragment : Fragment() {
                         val data=state.data
                         if(data!!.size>0){
                             val d=data
-                                .filter { it.title.contains(mainViewModel.searchString) }
+                                .filter { it.title.lowercase().contains(mainViewModel.searchString.lowercase()) }
                                 .map{
                                 ProductMapper().buildProduct(it)
                             }
-                            Log.d("Product_Title",d[0].title)
+
                             val sectionTitle=SectionLabel("Epoxy test",R.drawable.ic_people)
 
+                            if(d.isNotEmpty()){
                             epoxyController?.updateData(sectionTitle,d)
+                            }
                     }
 
                     }
