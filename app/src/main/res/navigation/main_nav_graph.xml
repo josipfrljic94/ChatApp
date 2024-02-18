@@ -1,21 +1,16 @@
 <!-- main_nav_graph.xml -->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav_graph"
     app:startDestination="@+id/nested_nav_graph">
 
-<!--    <fragment-->
-<!--        android:id="@+id/homeFragment"-->
-<!--        android:name="com.example.fragment.fragments.HomeFragment"-->
-<!--        android:label="List Online">-->
-
-<!--    </fragment>-->
     <include app:graph="@navigation/main_nested_graph"/>
-    <fragment
+    <dialog
         android:id="@+id/listOnlineFragment"
         android:name="com.example.fragment.fragments.ListOnlineFragment"
         android:label="List Online">
-    </fragment>
+    </dialog>
 
 
 </navigation>

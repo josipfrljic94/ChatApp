@@ -27,6 +27,9 @@
             android:defaultValue=""
             app:argType="string"
             />
+        <action
+            android:id="@+id/action_mealDetailFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 
 

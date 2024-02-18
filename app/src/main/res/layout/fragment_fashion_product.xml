@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="fProduct"
+            type="com.example.fragment.dao.Product" />
+    </data>
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="82dp"
+    tools:context=".FashionProductFragment"
+    android:elevation="12dp"
+    android:background="@color/white"
+    android:paddingHorizontal="12dp"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:text="title"
+        android:text="@{fProduct.title}"
+        android:gravity="start"
+        android:textSize="18dp"
+        android:textColor="@color/black"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:text="This is desc text with full of text"
+        android:text="@{fProduct.description}"
+        android:gravity="start|center"
+        />
+
+</RelativeLayout>
+
+</layout>

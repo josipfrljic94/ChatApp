@@ -1,12 +1,16 @@
 package com.example.fragment.fragments
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -26,6 +30,7 @@ import com.example.fragment.viewmodel.MainViewModel
 import com.example.fragment.viewmodel.SearchMealViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -68,11 +73,39 @@ class HomeFragment : Fragment() {
             epoxyRV!!.setController(epoxyController!!)
             setupRecyclerView()
 //            requestApiData()
-            requestProductApiData()
-
+//            requestProductApiData()
+            mainViewModel.getAllProducts()
+            updateProducts()
+            setupInputListener()
         }
 
         return binding!!.root
+    }
+
+
+
+    fun setupInputListener() {
+        binding!!.editText.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable?) {
+
+                Toast.makeText(context,s.toString(),Toast.LENGTH_SHORT)
+                mainViewModel.searchProductName(s.toString())
+                Log.d("EditText",s.toString())
+                updateProducts()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Not used in this example
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                Toast.makeText(context,s.toString(),Toast.LENGTH_SHORT)
+                Log.d("EditText2",s.toString())
+                mainViewModel.searchProductName(s.toString())
+
+            }
+        })
     }
 
     private fun requestApiData() {
@@ -95,17 +128,38 @@ class HomeFragment : Fragment() {
 
     }
 
+    private fun updateProducts(){
+        lifecycleScope.launch {
+            mainViewModel._productDataState.collect{
+                state->
+                when (state){
+                    is NetworkResponse.Loading -> Toast.makeText(context,"Products Loading",Toast.LENGTH_SHORT).show()
+
+                    is NetworkResponse<ResponseProduct> ->{
+                        val data=state.data
+                        if(data!!.size>0){
+                            val d=data
+                                .filter { it.title.contains(mainViewModel.searchString) }
+                                .map{
+                                ProductMapper().buildProduct(it)
+                            }
+                            Log.d("Product_Title",d[0].title)
+                            val sectionTitle=SectionLabel("Epoxy test",R.drawable.ic_people)
+
+                            epoxyController?.updateData(sectionTitle,d)
+                    }
+
+                    }
+                    else -> Toast.makeText(context,"Error",Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
     private fun requestProductApiData() {
         lifecycleScope.launch {
             mainViewModel.getProductResponse().collect { state ->
-//                when (state) {
-//                    is NetworkResponse.Loading -> Toast.makeText(context,"Loading",Toast.LENGTH_SHORT).show()
-//                    is ResponseProduct -> {
-//                        Toast.makeText(context,"Success",Toast.LENGTH_SHORT).show()
-//                        Log.d("HFSUCCESS",state.state.toString())
-//                        mealsAdapter.setMeals(ArrayList(state?.results))
-
-//                        binding.epoxyRecyclerView.setController()
 
                         if(state.size>0){
                             val d=state.map{
@@ -137,19 +191,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-//    private fun setupEpoxyRecyclerView() {
-//        epoxyRV.apply {
-//            layoutManager=LinearLayoutManager(activity)
-//            adapter=
-//        }
-//    }
-
-
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//        binding.viewModel = mainViewModel
-//        binding.lifecycleOwner = viewLifecycleOwner
-//    }
 
 
 }
