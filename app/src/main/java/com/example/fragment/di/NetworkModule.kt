@@ -2,12 +2,15 @@ package com.example.fragment.di
 
 import com.example.fragment.service.MealService
 import com.example.fragment.service.ProductService
+import com.example.fragment.service.SportFeedService
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.annotation.Nonnull
@@ -60,5 +63,20 @@ internal object NetworkModule {
             return retrofit.create(ProductService::class.java)
         }
 
+
+    @Singleton
+    @Provides
+    @Named("sport_feed_retrofit")
+    fun provideSportsService(
+        httpClient: OkHttpClient
+    ): SportFeedService {
+        return Retrofit.Builder()
+            .baseUrl("https://site.api.espn.com/apis/site/v2/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .client(httpClient)
+            .build()
+            .create(SportFeedService::class.java)
+    }
 
 }

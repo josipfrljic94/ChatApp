@@ -8,8 +8,6 @@ plugins {
 }
 
 
-
-
 android {
     namespace = "com.example.fragment"
     compileSdk = 34
@@ -20,9 +18,14 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+//    packagingOptions {
+//        exclude("META-INF/rxjava.properties")
+//    }
+
+
+
 
     buildTypes {
         release {
@@ -33,6 +36,11 @@ android {
             )
         }
     }
+
+//    androidExtensions {
+//        experimental = true
+//    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -44,6 +52,7 @@ android {
         dataBinding = true
         viewBinding=true
     }
+
 }
 
 dependencies {
@@ -109,9 +118,17 @@ dependencies {
 
 //    kapt("groupId:artifactId:version")
 
+    // RetroFit
+    val retrofit_version = "2.5.0"
+    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
+    implementation ("com.squareup.retrofit2:converter-gson:$retrofit_version")
+    implementation ("com.squareup.retrofit2:adapter-rxjava2:$retrofit_version")
+    implementation("com.squareup.okhttp3:logging-interceptor:3.8.0")
 
+    // RxJava
+    implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
+    implementation("io.reactivex.rxjava2:rxjava:2.2.8")
 
-    implementation("com.squareup.retrofit2:converter-gson:2.8.1")
 
 
 
