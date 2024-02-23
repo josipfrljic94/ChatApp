@@ -1,5 +1,6 @@
 package com.example.fragment.viewmodel
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
@@ -8,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.fragment.ProductMapper
+import com.example.fragment.dao.FeedBaseballScoreBoard
 import com.example.fragment.dao.FoodRecipe
 import com.example.fragment.dao.Product
 import com.example.fragment.dao.ResponseProduct
@@ -15,6 +17,8 @@ import com.example.fragment.database.MealEntity
 import com.example.fragment.repository.Repository
 import com.example.fragment.util.NetworkResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -89,6 +93,46 @@ var searchString=""
             _productDataState.value =
                 NetworkResponse.Error("Recipies not found, error: ${e.message}")
         }
+    }
+
+//    fun getBasseballInfoData(){
+//        viewModelScope.launch(Dispatchers.IO) {
+//            getBasseballData()
+//        }
+//    }
+
+
+
+
+
+      @SuppressLint("CheckResult", "SuspiciousIndentation")
+      fun getBasseballData(): Single<FeedBaseballScoreBoard> {
+        _productDataState.value = NetworkResponse.Loading()
+          return repository.remote.getSportFeed()
+//        try {
+//            Log.d("getBasseballData is called","start")
+//            val response = repository.remote.getSportFeed()
+//            response
+//                .subscribeOn(Schedulers.io())
+//                .subscribe({
+//                data->
+//                    if(data != null){
+//                        Log.d("DISPOSE RESPONSE",data.leagues[0].name)
+//                        data.leagues.forEach {
+//                            Log.d("DISPOSE RESPONE",it.name)
+//                        }
+//                    }
+//
+//            },
+//                { error -> // onError callback
+//                    // Handle error (e.g., display error message, retry request)
+//                    Log.d("DISPOSE RESPONE",error.message.toString())
+//                }
+//            )
+//        } catch (e: Exception) {
+//            _productDataState.value =
+//                NetworkResponse.Error("Recipies not found, error: ${e.message}")
+//        }
     }
 
     fun getAllProducts() {

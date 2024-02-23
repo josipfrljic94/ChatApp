@@ -1,5 +1,6 @@
 package com.example.fragment.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -24,11 +25,13 @@ import com.example.fragment.dao.FoodRecipe
 import com.example.fragment.dao.ResponseProduct
 import com.example.fragment.dao.SectionLabel
 import com.example.fragment.databinding.FragmentHomeBinding
+import com.example.fragment.epoxy.LeagueEpoxyController
 import com.example.fragment.epoxy.ProductEpoxyController
 import com.example.fragment.util.NetworkResponse
 import com.example.fragment.viewmodel.MainViewModel
 import com.example.fragment.viewmodel.SearchMealViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -41,12 +44,14 @@ class HomeFragment : Fragment() {
     private lateinit var mealsAdapter: MealsAdapter
     private lateinit var mealRecyclerView:RecyclerView
     private lateinit var epoxyRV:EpoxyRecyclerView
+    private lateinit var leagueEpoxyRV:EpoxyRecyclerView
     private lateinit var  mView: View
 
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding
     private var epoxyController:ProductEpoxyController?=null
+    private var leagueEpoxyController:LeagueEpoxyController?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,20 +74,55 @@ class HomeFragment : Fragment() {
             mealRecyclerView=binding!!.recyclerView
             epoxyRV=binding!!.epoxyRecyclerView
             epoxyRV.layoutManager=LinearLayoutManager(context)
+
+            leagueEpoxyRV=binding!!.leaguEpoxyRecyclerView
+            leagueEpoxyRV.layoutManager=LinearLayoutManager(context)
+
             epoxyController= ProductEpoxyController()
+            leagueEpoxyController=LeagueEpoxyController()
             epoxyRV!!.setController(epoxyController!!)
+
+            leagueEpoxyRV!!.setController(leagueEpoxyController!!)
+
             setupRecyclerView()
 //            requestApiData()
 //            requestProductApiData()
             mainViewModel.getAllProducts()
             updateProducts()
             setupInputListener()
+            getBasseballData()
+
         }
 
         return binding!!.root
     }
 
 
+
+
+    @SuppressLint("CheckResult")
+    fun getBasseballData(){
+//        lifecycleScope.launch {
+         try {
+             mainViewModel.getBasseballData()
+                 .subscribeOn(Schedulers.io())
+                 .subscribe({
+                         data->
+                            if(data != null){
+                             leagueEpoxyController!!.updateData(data.leagues)
+                            }
+                     },
+                     { error -> // onError callback
+                    // Handle error (e.g., display error message, retry request)
+                    Log.d("DISPOSE RESPONE",error.message.toString())
+                }
+                 )
+         } catch (e: Exception) {
+//            _productDataState.value =
+//                NetworkResponse.Error("Recipies not found, error: ${e.message}")
+        }
+//        }
+    }
 
     fun setupInputListener() {
         binding!!.editText.addTextChangedListener(object : TextWatcher {

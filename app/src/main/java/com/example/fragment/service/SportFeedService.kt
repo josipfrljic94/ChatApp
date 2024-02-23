@@ -9,6 +9,15 @@ interface SportFeedService {
     @GET("sports/baseball/mlb/scoreboard")
     fun getMLBGames(): Single<FeedBaseballScoreBoard>
 
+    @GET("sports/soccer/usa.1/scoreboard")
+    fun getMLSGames(): Single<FeedBaseballScoreBoard>
+
+//    @GET("sports/hockey/nhl/scoreboard")
+//    fun getNHLGames(): Single<DefaultScoreboardData>
+
+//    @GET("sports/basketball/nba/scoreboard")
+//    fun getNBAGames(): Single<DefaultScoreboardData>
+
 //    @GET("sports/soccer/usa.1/scoreboard")
 //    fun getMLSGames(): Single<SoccerScoreboardData>
 //

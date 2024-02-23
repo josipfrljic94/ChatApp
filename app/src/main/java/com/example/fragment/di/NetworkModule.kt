@@ -4,11 +4,13 @@ import com.example.fragment.service.MealService
 import com.example.fragment.service.ProductService
 import com.example.fragment.service.SportFeedService
 import com.google.gson.GsonBuilder
+import com.intuit.sdp.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -64,19 +66,57 @@ internal object NetworkModule {
         }
 
 
-    @Singleton
+
     @Provides
+    @Singleton
     @Named("sport_feed_retrofit")
-    fun provideSportsService(
-        httpClient: OkHttpClient
-    ): SportFeedService {
+    fun provideHttpClient(): OkHttpClient {
+        val logging = HttpLoggingInterceptor()
+
+        if (BuildConfig.DEBUG) {
+            logging.level = HttpLoggingInterceptor.Level.BASIC
+        }
+
+        return OkHttpClient.Builder()
+            .addInterceptor(logging)
+            .build()
+    }
+
+
+
+    @Provides
+    @Singleton
+    @Named("sport_feed_retrofit")
+    fun provideRetrofitSportFeedInstance(@Nonnull @Named("sport_feed_retrofit") httpClient: OkHttpClient):Retrofit{
         return Retrofit.Builder()
             .baseUrl("https://site.api.espn.com/apis/site/v2/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .client(httpClient)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
-            .create(SportFeedService::class.java)
     }
+
+    @Provides
+    @Singleton
+    @Named("sport_feed_retrofit")
+    fun provideSportsService(@Nonnull @Named("sport_feed_retrofit") retrofit: Retrofit): SportFeedService {
+        return retrofit.create(SportFeedService::class.java)
+    }
+
+
+//    @Singleton
+//    @Provides
+//    @Named("sport_feed_retrofit")
+//    fun provideSportsService(
+//        httpClient: OkHttpClient
+//    ): SportFeedService {
+//        return Retrofit.Builder()
+//            .baseUrl("https://site.api.espn.com/apis/site/v2/")
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//            .client(httpClient)
+//            .build()
+//            .create(SportFeedService::class.java)
+//    }
 
 }
