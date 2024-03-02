@@ -27,6 +27,7 @@ android {
 
 
 
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -51,6 +52,11 @@ android {
     buildFeatures {
         dataBinding = true
         viewBinding=true
+        compose= true
+
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion="1.4.2"
     }
 
 }
@@ -129,7 +135,15 @@ dependencies {
     implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
     implementation("io.reactivex.rxjava2:rxjava:2.2.8")
 
+    //compose
+    implementation("androidx.compose.ui:ui:1.6.2")
 
+    implementation("androidx.compose.material:material:1.6.2")
+    implementation("androidx.compose.runtime:runtime:1.6.2")
+    implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("androidx.compose.ui:ui-graphics")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose:compose-bom:2024.02.01")
 
 
 }
