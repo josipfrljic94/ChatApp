@@ -63,21 +63,20 @@
             android:paddingTop="8dp"
             android:paddingBottom="24dp"
             tools:itemCount="7"
-            app:layout_constraintBottom_toTopOf="@id/leaguEpoxyRecyclerView"
             />
 
-        <com.airbnb.epoxy.EpoxyRecyclerView
-            android:id="@+id/leaguEpoxyRecyclerView"
-            android:layout_width="match_parent"
-            app:layout_constraintTop_toBottomOf="@id/epoxyRecyclerView"
-            android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:orientation="vertical"
-            android:paddingTop="8dp"
-            android:paddingBottom="24dp"
-            tools:itemCount="7"
+<!--        <com.airbnb.epoxy.EpoxyRecyclerView-->
+<!--            android:id="@+id/leaguEpoxyRecyclerView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/epoxyRecyclerView"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+<!--            android:orientation="vertical"-->
+<!--            android:paddingTop="8dp"-->
+<!--            android:paddingBottom="24dp"-->
+<!--            tools:itemCount="7"-->
 
-            />
+<!--            />-->
 
     </LinearLayout>
 </layout>

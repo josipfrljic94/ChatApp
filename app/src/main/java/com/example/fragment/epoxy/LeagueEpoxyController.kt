@@ -34,7 +34,6 @@ class LeagueEpoxyController: EpoxyController() {
     }
 
     fun updateData(leagues: List<League>) {
-//        this.section = sectionLabel
         this.leagues = leagues
         requestModelBuild()
     }

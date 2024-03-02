@@ -51,7 +51,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding
     private var epoxyController:ProductEpoxyController?=null
-    private var leagueEpoxyController:LeagueEpoxyController?=null
+//    private var leagueEpoxyController:LeagueEpoxyController?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,14 +75,14 @@ class HomeFragment : Fragment() {
             epoxyRV=binding!!.epoxyRecyclerView
             epoxyRV.layoutManager=LinearLayoutManager(context)
 
-            leagueEpoxyRV=binding!!.leaguEpoxyRecyclerView
-            leagueEpoxyRV.layoutManager=LinearLayoutManager(context)
+//            leagueEpoxyRV=binding!!.leaguEpoxyRecyclerView
+//            leagueEpoxyRV.layoutManager=LinearLayoutManager(context)
 
             epoxyController= ProductEpoxyController()
-            leagueEpoxyController=LeagueEpoxyController()
+//            leagueEpoxyController=LeagueEpoxyController()
             epoxyRV!!.setController(epoxyController!!)
 
-            leagueEpoxyRV!!.setController(leagueEpoxyController!!)
+//            leagueEpoxyRV!!.setController(leagueEpoxyController!!)
 
             setupRecyclerView()
 //            requestApiData()
@@ -109,7 +109,7 @@ class HomeFragment : Fragment() {
                  .subscribe({
                          data->
                             if(data != null){
-                             leagueEpoxyController!!.updateData(data.leagues)
+                             epoxyController!!.setLeagueData(data.leagues)
                             }
                      },
                      { error -> // onError callback
