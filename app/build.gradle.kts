@@ -137,7 +137,7 @@ dependencies {
 
     //compose
     implementation("androidx.compose.ui:ui:1.6.2")
-
+    implementation("io.coil-kt:coil-compose:2.6.0")
     implementation("androidx.compose.material:material:1.6.2")
     implementation("androidx.compose.runtime:runtime:1.6.2")
     implementation("androidx.activity:activity-compose:1.8.2")

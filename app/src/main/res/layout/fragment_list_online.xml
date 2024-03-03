@@ -2,23 +2,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="@dimen/_300sdp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.ListOnlineFragment">
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/list_online_compose"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_320sdp"
-        android:layout_gravity="center_horizontal|center_vertical"
-         >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Meal filter"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="wrap_content" />
 
 </FrameLayout>
