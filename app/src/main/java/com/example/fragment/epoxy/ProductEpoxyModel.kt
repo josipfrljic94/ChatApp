@@ -6,7 +6,7 @@ import com.example.fragment.dao.Product
 import com.example.fragment.databinding.ProductItemBinding
 
 
-data class ProductEpoxyModel(val product: Product)
+data class ProductEpoxyModel(val product: Product, val onSwipedCB:()->Unit)
     :ViewBindingKotlinModel<ProductItemBinding>(R.layout.product_item){
 
 

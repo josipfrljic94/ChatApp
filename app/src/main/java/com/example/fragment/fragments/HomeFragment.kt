@@ -15,9 +15,11 @@ import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyRecyclerView
+import com.airbnb.epoxy.EpoxyTouchHelper
 import com.example.fragment.ProductMapper
 import com.example.fragment.R
 import com.example.fragment.adapters.MealsAdapter
@@ -27,6 +29,7 @@ import com.example.fragment.dao.SectionLabel
 import com.example.fragment.databinding.FragmentHomeBinding
 import com.example.fragment.epoxy.LeagueEpoxyController
 import com.example.fragment.epoxy.ProductEpoxyController
+import com.example.fragment.epoxy.ProductEpoxyModel
 import com.example.fragment.util.NetworkResponse
 import com.example.fragment.viewmodel.MainViewModel
 import com.example.fragment.viewmodel.SearchMealViewModel
@@ -168,7 +171,29 @@ class HomeFragment : Fragment() {
 
     }
 
+
+
     private fun updateProducts(){
+
+        EpoxyTouchHelper.initSwiping(binding!!.epoxyRecyclerView)
+            .right()
+            .withTarget(ProductEpoxyModel::class.java)
+            .andCallbacks(object : EpoxyTouchHelper.SwipeCallbacks<ProductEpoxyModel>(){
+                override fun onSwipeCompleted(
+                    model: ProductEpoxyModel?,
+                    itemView: View?,
+                    position: Int,
+                    direction: Int
+                ) {
+                   model?.let{
+                      lifecycleScope.launch {
+                          it.onSwipedCB()
+                      }
+                   }
+                }
+
+            })
+
         lifecycleScope.launch {
             mainViewModel._productDataState.collect{
                 state->

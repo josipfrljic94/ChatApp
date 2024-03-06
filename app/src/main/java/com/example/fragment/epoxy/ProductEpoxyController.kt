@@ -15,7 +15,9 @@ class ProductEpoxyController: EpoxyController() {
      private var products: List<Product> = emptyList()
      private var section:SectionLabel?=null
     private var leagues: List<League> = emptyList()
-     override fun buildModels() {
+    private val filterIds: MutableList<Int> = mutableListOf()
+
+    override fun buildModels() {
 
          if(section != null){
              addSectionTitleModel(section!!)
@@ -32,7 +34,16 @@ class ProductEpoxyController: EpoxyController() {
          }
 
          if(!products.isNullOrEmpty()){
-             products.forEach{ item->
+             products
+//                 .filter {
+//                     filterIds.any{id ->
+//                             id != it.id
+//                         }
+//                 }
+                 .filter {
+                     !filterIds.contains(it.id)
+                 }
+                 .forEach{ item->
                  when(item){
                      is  Product->{
                          addProduct(item)
@@ -43,8 +54,12 @@ class ProductEpoxyController: EpoxyController() {
          }
      }
 
+    private fun deleteProduct(id:Int){
+        filterIds.add(id)
+        requestModelBuild()
+    }
      private fun addProduct(p: Product) {
-         ProductEpoxyModel(p)
+         ProductEpoxyModel(p){deleteProduct(p.id)}
              .id(p.id)
              .addTo(this)
      }
